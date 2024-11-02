@@ -49,7 +49,11 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
+    //Picasso
+    implementation(libs.picasso)
 
+    //Circular image
+    implementation(libs.circleimageview)
 
     // Retrofit
     implementation(libs.retrofit)
@@ -57,10 +61,27 @@ dependencies {
 
     //Live data
     implementation(libs.androidx.lifecycle.livedata.ktx)
+
     //ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.ktx)
 
     //Coroutines
     implementation(libs.kotlinx.coroutines.android)
     implementation(libs.kotlinx.coroutines.core)
+
+    // Mockito-Kotlin extensions
+    testImplementation(libs.mockito.kotlin)
+
+    //Testing
+    testImplementation ("com.google.truth:truth:1.1")
+    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
+    androidTestImplementation("androidx.test:runner:1.6.1")
+    androidTestImplementation("androidx.test:rules:1.6.1")
+
+
+    // LiveData testing
+    testImplementation ("androidx.arch.core:core-testing:2.1.0")
+
+    testImplementation("org.mockito:mockito-inline:3.12.4")
+
 }

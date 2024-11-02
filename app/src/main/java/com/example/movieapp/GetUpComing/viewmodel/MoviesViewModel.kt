@@ -5,12 +5,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.movieapp.GetUpComing.Model.Movies.UpComingMoviesResponse
-import com.example.movieapp.GetUpComing.Repository.UpComingRepository
+import com.example.movieapp.GetUpComing.Model.Trending.TrendingResponse
+import com.example.movieapp.GetUpComing.Repository.MovieRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 
-class UpComingViewModel(private val repo: UpComingRepository) : ViewModel() {
+class MoviesViewModel(private val repo: MovieRepository) : ViewModel() {
     var upComingMovies: MutableLiveData<UpComingMoviesResponse> = MutableLiveData()
     val upComingMovieLiveData: LiveData<UpComingMoviesResponse>
         get() = upComingMovies
@@ -18,6 +19,10 @@ class UpComingViewModel(private val repo: UpComingRepository) : ViewModel() {
     var error: MutableLiveData<String> = MutableLiveData()
     val errorMessage: LiveData<String>
         get() = error
+
+    var trendingMovie: MutableLiveData<TrendingResponse> = MutableLiveData()
+    val trendingMovieLiveData: LiveData<TrendingResponse>
+        get() = trendingMovie
 
     fun getUpComingMovieData() {
         viewModelScope.launch(Dispatchers.IO) {
@@ -28,6 +33,21 @@ class UpComingViewModel(private val repo: UpComingRepository) : ViewModel() {
                 } else {
                     error.postValue(result.code().toString())
                 }
+            }
+        }
+    }
+
+    fun getTrendingMoviesData() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val result = repo.getTrendingMovie()
+            if (result.isSuccessful && result.body() != null) {
+                if (result.code() == 200 ) {
+                    trendingMovie.postValue(result.body())
+                } else {
+                    error.postValue(result.code().toString())
+                }
+            } else {
+                error.postValue(result.message().toString())
             }
         }
     }
