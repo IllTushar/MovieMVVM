@@ -37,6 +37,8 @@ class TrendingMovieTesting {
 
         // Mocking LiveData from ViewModel
         `when`(viewModel.trendingMovieLiveData).thenReturn(trendingMoviesLiveData)
+
+        trendingMoviesLiveData.observeForever({ observer.onChanged(it.movies) })
     }
 
     @After
@@ -62,7 +64,7 @@ class TrendingMovieTesting {
 
         // Act: Set data and trigger the observer
         trendingMoviesLiveData.value = trendingResponse
-        viewModel.trendingMovieLiveData.observeForever { observer.onChanged(it.movies) }
+
 
         // Assert: Verify observer was triggered with correct data
         verify(observer).onChanged(trendingMovies)

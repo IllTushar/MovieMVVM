@@ -82,6 +82,7 @@ dependencies {
     // LiveData testing
     testImplementation ("androidx.arch.core:core-testing:2.1.0")
 
+    //Mockito Inline
     testImplementation("org.mockito:mockito-inline:3.12.4")
 
 }
