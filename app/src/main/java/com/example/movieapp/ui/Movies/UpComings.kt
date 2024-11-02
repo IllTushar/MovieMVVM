@@ -1,8 +1,13 @@
 package com.example.movieapp.ui.Movies
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -21,6 +26,12 @@ class UpComings : AppCompatActivity() {
     lateinit var binding: ActivityUpComingsBinding
     lateinit var adapter: MovieAdapter
     lateinit var trendingAdapter: trendingAdapter
+
+    // Define a request code for handling the permission result
+    companion object {
+        private const val REQUEST_CODE_POST_NOTIFICATIONS = 1001
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityUpComingsBinding.inflate(layoutInflater)
@@ -30,13 +41,28 @@ class UpComings : AppCompatActivity() {
         val viewModelFactory = UpComingViewModelFactory(repo)
 
         viewModel = ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
-
+        requestNotificationPermission()
         //Up-Comings
         UpComingMovies()
 
         //Trending
         trendingMovies()
 
+    }
+
+    fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                != PackageManager.PERMISSION_GRANTED
+            ) {
+                // Request the permission
+                ActivityCompat.requestPermissions(
+                    this,
+                    arrayOf(Manifest.permission.POST_NOTIFICATIONS),
+                    REQUEST_CODE_POST_NOTIFICATIONS
+                )
+            }
+        }
     }
 
     private fun trendingMovies() {
